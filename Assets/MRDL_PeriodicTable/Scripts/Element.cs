@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 //
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,6 +13,14 @@ namespace HoloToolkit.MRDL.PeriodicTable
 {
     public class Element : MonoBehaviour
     {
+        [Serializable]
+        public struct ObjectGroup
+        {
+            public int id;
+            public string name;
+            public GameObject obj;
+        }
+
         public static Element ActiveElement;
 
         public TextMesh ElementNumber;
@@ -31,6 +40,8 @@ namespace HoloToolkit.MRDL.PeriodicTable
         public MeshRenderer[] InfoPanels;
 
         public Atom Atom;
+
+        public ObjectGroup[] mathObjects;
 
         [HideInInspector]
         public ElementData data;
@@ -112,6 +123,7 @@ namespace HoloToolkit.MRDL.PeriodicTable
             animator.SetBool("Opened", true);
 
             //Color elementNameColor = ElementName.GetComponent<MeshRenderer>().material.color;
+            SetObject(data.object_id);
 
             while (Element.ActiveElement == this)
             {
@@ -138,12 +150,12 @@ namespace HoloToolkit.MRDL.PeriodicTable
             this.data = data;
 
             ElementNumber.text = data.number;
-            ElementName.text = data.symbol;
+            ElementName.text = data.name;
             ElementNameDetail.text = data.name;
 
             ElementDescription.text = data.summary;
-            DataAtomicNumber.text = data.number;
-            DataAtomicWeight.text = data.atomic_mass.ToString();
+            DataAtomicNumber.text = data.content_formula;
+            DataAtomicWeight.text = data.surface_area_formula;
             DataMeltingPoint.text = data.melt.ToString();
             DataBoilingPoint.text = data.boil.ToString();
 
@@ -179,6 +191,21 @@ namespace HoloToolkit.MRDL.PeriodicTable
 
             // Set our name so the container can alphabetize
             transform.parent.name = data.name;
+        }
+
+        private void SetObject(int id)
+        {
+            foreach (ObjectGroup objectGroup in mathObjects)
+            {
+                if (objectGroup.id == id)
+                {
+                    objectGroup.obj.SetActive(true);
+                }
+                else
+                {
+                    objectGroup.obj.SetActive(false);
+                }
+            }
         }
     }
 }

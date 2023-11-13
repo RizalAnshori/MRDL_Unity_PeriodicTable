@@ -31,6 +31,9 @@ namespace HoloToolkit.MRDL.PeriodicTable
         public string phase;
         public string summary;
         public int boil;
+        public int object_id;
+        public string content_formula;
+        public string surface_area_formula;
     }
 
     [System.Serializable]
@@ -70,6 +73,7 @@ namespace HoloToolkit.MRDL.PeriodicTable
         public Material MatNobleGas;
         public Material MatActinide;
         public Material MatLanthanide;
+        public string jsonPath = "JSON/PeriodicTableJSON";
 
         private bool isFirstRun = true;
 
@@ -85,7 +89,7 @@ namespace HoloToolkit.MRDL.PeriodicTable
             //    return;
 
             // Parse the elements out of the json file
-            TextAsset asset = Resources.Load<TextAsset>("JSON/PeriodicTableJSON");
+            TextAsset asset = Resources.Load<TextAsset>(jsonPath);
             List<ElementData> elements = ElementsData.FromJSON(asset.text).elements;
 
             Dictionary<string, Material> typeMaterials = new Dictionary<string, Material>()
